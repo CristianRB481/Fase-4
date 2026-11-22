@@ -30,7 +30,13 @@ class Servicio(Entidad):
     sirve de molde para SalaReserva, AlquilerEquipo y Asesoria.
     """
 
-    def __init__(self, identificacion, nombre, tarifa_base, disponible=True):
+    def __init__(
+        self,
+        identificacion,
+        nombre,
+        tarifa_base: int | float,
+        disponible=True,
+    ):
         # Validamos antes de construir el objeto: si falta el nombre
         # o la tarifa, se lanza una excepción personalizada.
         if nombre is None or not str(nombre).strip():
@@ -70,7 +76,7 @@ class Servicio(Entidad):
     # Métodos abstractos: cada servicio hijo DEBE sobrescribirlos
     # ---------------------------------------------------------
     @abstractmethod
-    def calcular_costo(self, duracion):
+    def calcular_costo(self, duracion: int | float) -> float:
         """Costo base del servicio (sin impuesto ni descuento)."""
 
     @abstractmethod
@@ -84,7 +90,12 @@ class Servicio(Entidad):
     # ---------------------------------------------------------
     # Método concreto con parámetros opcionales ("sobrecarga")
     # ---------------------------------------------------------
-    def calcular_costo_total(self, duracion, descuento=0.0, impuesto=TASA_IVA):
+    def calcular_costo_total(
+        self,
+        duracion: int | float,
+        descuento: float = 0.0,
+        impuesto: float = TASA_IVA,
+    ) -> float:
         """Calcula el costo final: base - descuento + impuesto.
 
         Python no tiene sobrecarga clásica; se logra con parámetros

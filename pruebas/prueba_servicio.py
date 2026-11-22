@@ -23,7 +23,7 @@ class ServicioPrueba(Servicio):
 
 def prueba_no_se_instancia():
     try:
-        Servicio("S1", "X", 100)
+        Servicio("S1", "X", 100)  # pyright: ignore[reportAbstractUsage]
         print("FALLO: no debió crearse")
     except TypeError:
         print("OK  Servicio es abstracta")

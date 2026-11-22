@@ -15,6 +15,10 @@ class SoftwareFJerror(Exception):
          self.mensaje = mensaje
 
 
+# Nombre correcto y compatible con el resto del proyecto.
+SoftwareFJError = SoftwareFJerror
+
+
 #------------
 #error de datos 
 #------------

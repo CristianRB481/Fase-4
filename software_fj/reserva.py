@@ -6,10 +6,10 @@
 
 
 # reserva.py
-from cliente import Cliente
-from servicio import Servicio
-from equipo import AlquilerEquipo
-from excepciones import (
+from software_fj.cliente import Cliente
+from software_fj.servicio import Servicio
+from software_fj.equipo import AlquilerEquipo
+from software_fj.excepciones import (
     ClienteInvalidoError,
     ServicioInvalidoError,
     ServicioNoDisponibleError,
@@ -19,6 +19,57 @@ from excepciones import (
 )
 
 #creacion de la clase reserva
+class Reserva:
+    """Representa una reserva simple de un servicio para un cliente."""
+
+    ESTADOS_VALIDOS = ("Pendiente", "Confirmada", "Cancelada")
+
+    def __init__(self, cliente: Cliente, servicio: Servicio, duracion: float):
+        if not isinstance(cliente, Cliente):
+            raise ClienteInvalidoError("La reserva debe asociarse a un cliente válido.")
+        if not isinstance(servicio, Servicio):
+            raise ServicioInvalidoError("La reserva debe asociarse a un servicio válido.")
+        if (not isinstance(duracion, (int, float))
+                or isinstance(duracion, bool)
+                or duracion <= 0):
+            raise DuracionInvalidaError("La duración debe ser mayor que cero.")
+
+        self._cliente = cliente
+        self._servicio = servicio
+        self._duracion = duracion
+        self._estado = "Pendiente"
+        self._motivo_cancelacion = None
+
+    @property
+    def cliente(self) -> Cliente:
+        return self._cliente
+
+    @property
+    def servicio(self) -> Servicio:
+        return self._servicio
+
+    @property
+    def duracion(self) -> float:
+        return self._duracion
+
+    @property
+    def estado(self) -> str:
+        return self._estado
+
+    def confirmar(self):
+        if self._estado != "Pendiente":
+            raise OperacionNoPermitidaError(
+                "Solo se pueden confirmar reservas pendientes."
+            )
+        self._estado = "Confirmada"
+
+    def cancelar(self, motivo=None):
+        if self._estado == "Cancelada":
+            raise OperacionNoPermitidaError("La reserva ya está cancelada.")
+        self._estado = "Cancelada"
+        self._motivo_cancelacion = motivo
+
+
 class ReservaServicios:
     """Gestiona el carrito de compras y ciclo de vida de una reserva de servicios."""
 
@@ -33,9 +84,8 @@ class ReservaServicios:
         self._estado = "Pendiente"
 
    
-    # Propiedades 
-        @property
-
+    # Propiedades
+    @property
     def cliente(self) -> Cliente:
         return self._cliente
 
